@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputeRunner", "ComputeRunner\ComputeRunner.csproj", "{540BF19E-C38E-4609-9374-0AEAB8217641}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComputeRunner", "ComputeRunner\ComputeRunner.csproj", "{540BF19E-C38E-4609-9374-0AEAB8217641}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputeService", "ComputeService\ComputeService.csproj", "{664840E0-53A8-43DA-810F-40230DEC6816}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComputeService", "ComputeService\ComputeService.csproj", "{664840E0-53A8-43DA-810F-40230DEC6816}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWebApi", "SimpleWebApi\SimpleWebApi.csproj", "{C369A755-E140-45F5-857A-335740849E53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{664840E0-53A8-43DA-810F-40230DEC6816}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{664840E0-53A8-43DA-810F-40230DEC6816}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{664840E0-53A8-43DA-810F-40230DEC6816}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C369A755-E140-45F5-857A-335740849E53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C369A755-E140-45F5-857A-335740849E53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C369A755-E140-45F5-857A-335740849E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C369A755-E140-45F5-857A-335740849E53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

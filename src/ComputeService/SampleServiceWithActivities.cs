@@ -4,47 +4,63 @@ namespace ComputeService
 {
     public class SampleServiceWithActivities : SampleService
     {
-        public override double Compute(int startValue)
+        public async Task<double> ComputeAsync(int startValue)
         {
-            double v = (double)startValue;
-            using (Activity? activity = MatActivitySource.Instance.StartActivity("ComputationLoop")) // IDisposable for timetracking
+            using (MatActivitySource.Instance.StartActivity("Service.Compute"))
             {
-                
-                for (int i = 0; i < 5; i++)
+                double v = (double)startValue;
+                using (Activity? activity = MatActivitySource.Instance.StartActivity("ComputationLoop")) // IDisposable for timetracking
                 {
-                    //First pass
-                    using (MatActivitySource.Instance.StartActivity("FirstComputationStep"))//they know they're wrapped in parent activity
+
+                    for (int i = 0; i < 5; i++)
                     {
-                        v = FirstComputationStep(v);
+                        //First pass
+                        using (MatActivitySource.Instance.StartActivity("FirstComputationStep"))//they know they're wrapped in parent activity
+                        {
+                            v = FirstComputationStep(v);
+                        }
+
+                        //second pass
+                        using (MatActivitySource.Instance.StartActivity("SecondComputationStep"))
+                        {
+                            v = SecondComputationStep(v);
+                        }
+
                     }
 
-                    //second pass
-                    using (MatActivitySource.Instance.StartActivity("SecondComputationStep"))
-                    {
-                        v = SecondComputationStep(v);
-                    }
-                
                 }
 
-            }
-
-            using (MatActivitySource.Instance.StartActivity("FinalComputationStep"))
-            {
-                double ms = _rnd.Next(1000, 3000);
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-                while (sw.ElapsedMilliseconds < ms)
+                using (MatActivitySource.Instance.StartActivity("FinalComputationStep"))
                 {
-                    v = v * v;
-                    v = Math.Sqrt(v);
+                    double ms = _rnd.Next(1000, 3000);
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+                    while (sw.ElapsedMilliseconds < ms)
+                    {
+                        v = v * v;
+                        v = Math.Sqrt(v);
+                    }
                 }
-            }
 
-            //return
-            return v;
+                //Cache the result in caching microservice
+                string startValueMd5 = CreateMD5(startValue.ToString());
+                var client = new HttpClient() { BaseAddress = new Uri("http://localhost:5000") };
+                await client.PostAsync($"/cache/{startValueMd5}", new StringContent(v.ToString()));
+
+                //return
+                return v;
+            }
         }
 
-        
+        private string CreateMD5(string v)
+        {
+            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+            {
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(v);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+                return Convert.ToHexString(hashBytes);
+            }
+        }
     }
 
 }

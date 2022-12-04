@@ -8,7 +8,7 @@ namespace ComputeRunner
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             AddActivityOutput();
 
@@ -17,7 +17,7 @@ namespace ComputeRunner
             Console.WriteLine("Starting with value: {0}",startValue);
 
             var service = new SampleServiceWithActivities();
-            double computed = service.Compute(startValue);
+            double computed = await service.ComputeAsync(startValue);
             Console.WriteLine("The result is: {0}", computed);
         }
 
