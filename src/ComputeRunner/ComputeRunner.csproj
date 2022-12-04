@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Spectre.Console" Version="0.45.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ComputeService\ComputeService.csproj" />
   </ItemGroup>
 

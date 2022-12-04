@@ -79,3 +79,9 @@ Provider angegeben werden:
 
 Weitere Provider für tracing events gibts hier:
 https://github.com/dotnet/diagnostics/blob/main/documentation/dotnet-trace-instructions.md
+
+
+## Distibuted tracing
+* Ist in .net runtime enthalten (keine Zusatzdependencies nötig)
+* OpenTelemetry standards
+* 
