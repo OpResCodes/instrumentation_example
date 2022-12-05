@@ -84,4 +84,26 @@ https://github.com/dotnet/diagnostics/blob/main/documentation/dotnet-trace-instr
 ## Distibuted tracing
 * Ist in .net runtime enthalten (keine Zusatzdependencies nötig)
 * OpenTelemetry standards
-* 
+
+
+
+
+## App Metrics
+
+Counters tool global installieren:
+    
+    dotnet tool install -g dotnet-counters
+
+Verfügbar .net counter auflisten
+
+    dotnet counters list
+
+Prozesse, die aktuell laufen und überwacht werden können
+
+    dotnet counter ps
+
+Mit der Prozess-ID kann dann z.B. der monitor Befehl genutzt werden
+
+    dotnet counters monitor -p 10276
+ 
+ Launched Terminal, dass jede Sekunde (Einstellbar) die counter aktualisiert
