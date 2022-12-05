@@ -1,4 +1,7 @@
 using ComputeService;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using OpenTelemetry;
 using Spectre.Console;
 using System.Diagnostics;
 using System.Globalization;
@@ -10,10 +13,22 @@ namespace SimpleWebApi
     {
         public static void Main(string[] args)
         {
-            AddActivityOutput();
 
             var builder = WebApplication.CreateBuilder(args);
             WebApplication app = builder.Build();
+
+            AddActivityOutput();
+
+            //Enable JAeger Export (see jaeger website, cannot be extracted)
+            using TracerProvider? tracerProvider = Sdk.CreateTracerProviderBuilder()
+                .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("ComputeRunner.CacheService"))
+                .AddSource(MatActivitySource.Instance.Name)
+                .AddJaegerExporter(o => {
+                    o.Protocol = OpenTelemetry.Exporter.JaegerExportProtocol.HttpBinaryThrift;
+                })
+                .AddHttpClientInstrumentation()
+                .AddAspNetCoreInstrumentation()
+                .Build();
 
             app.MapPost("/cache/{inputValue}", async (HttpRequest request) =>
             {
@@ -32,7 +47,6 @@ namespace SimpleWebApi
 
             app.Run("http://localhost:5000");
         }
-
 
         static void AddActivityOutput()
         {

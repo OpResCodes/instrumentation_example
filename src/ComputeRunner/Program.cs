@@ -1,4 +1,7 @@
 ﻿using ComputeService;
+using OpenTelemetry;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Spectre.Console;
 using System.Data;
 using System.Diagnostics;
@@ -11,6 +14,17 @@ namespace ComputeRunner
         static async Task Main(string[] args)
         {
             AddActivityOutput();
+
+            //Enable JAeger Export (see jaeger website)
+            using TracerProvider? tracerProvider = Sdk.CreateTracerProviderBuilder()
+                .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("ComputeRunner.ClientConsole"))
+                .AddSource(MatActivitySource.Instance.Name)
+                .AddJaegerExporter(o =>
+                {
+                    o.Protocol = OpenTelemetry.Exporter.JaegerExportProtocol.HttpBinaryThrift;
+                })
+                .AddHttpClientInstrumentation()
+                .Build();
 
             Console.WriteLine("ComputeRunner v1.0");
             int.TryParse(args[0], out int startValue);

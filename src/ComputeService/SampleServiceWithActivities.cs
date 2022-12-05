@@ -11,9 +11,12 @@ namespace ComputeService
                 double v = (double)startValue;
                 using (Activity? activity = MatActivitySource.Instance.StartActivity("ComputationLoop")) // IDisposable for timetracking
                 {
+                    activity?.AddTag("someMoreInfo", DateTime.Now);
+                    activity?.AddTag("User", "Matthes");
 
                     for (int i = 0; i < 5; i++)
                     {
+                        activity?.AddEvent(new ActivityEvent($"Passed Iteration {i}"));
                         //First pass
                         using (MatActivitySource.Instance.StartActivity("FirstComputationStep"))//they know they're wrapped in parent activity
                         {

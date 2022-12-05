@@ -2,7 +2,7 @@
 
 namespace ComputeService
 {
-    static class MatActivitySource
+    public static class MatActivitySource
     {
 
         //considered good practice to expose the named activitysource:
