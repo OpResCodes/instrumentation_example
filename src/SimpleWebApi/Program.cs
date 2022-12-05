@@ -30,6 +30,7 @@ namespace SimpleWebApi
                 .AddAspNetCoreInstrumentation()
                 .Build();
 
+            //write to cache
             app.MapPost("/cache/{inputValue}", async (HttpRequest request) =>
             {
                 string md5 = request.RouteValues["inputValue"] as string;
@@ -43,6 +44,22 @@ namespace SimpleWebApi
                     await File.WriteAllTextAsync(fileName,content);
                 }
 
+                //increase cache put counter
+                Counters.CachePuts.Add(1);
+
+            });
+
+            //read from cache
+            app.MapGet("/cache/{md5}", async (string md5) =>
+            {
+                if (!File.Exists($"{md5}.txt"))
+                    return Results.NotFound();
+
+                //increase cache hit counter
+                Counters.CacheHits.Add(1);
+
+                var result = File.ReadAllText($"{md5}.txt");
+                return Results.Text(result);
             });
 
             app.Run("http://localhost:5000");
