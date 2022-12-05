@@ -107,3 +107,25 @@ Mit der Prozess-ID kann dann z.B. der monitor Befehl genutzt werden
     dotnet counters monitor -p 10276
  
  Launched Terminal, dass jede Sekunde (Einstellbar) die counter aktualisiert
+
+ Dotnet counters kennt die custom counters nicht, sondern guckt nur auf System.Runtime counters
+
+ Um eigene Counter anzuzeigen kommaseparierte Liste angeben:
+
+    dotnet counters monitor -p 10276 --counters System.Runtime, Matthes.ComputeService.Api
+    
+###Counter types
+   
+* Counters (increase, positive values only)
+    * CreateCounter(), CreateObservableCounter()
+* UpDownCounter (increment/decrement)
+    * CreateUpDownCounter(), CreateObservableCounter()
+* Gauge (super lightweight, only last value saved, example: RAM usage)
+    * CreateObservableGauge()
+* Histogram (most expensive, but percentiles)
+    * CreateHistogram()
+
+Counter können z.B. in Prometheus gesammelt werden, da sie auch über den diagnostic port abgegriffen werden können.
+* Collection tool: https://prometheus.io
+    * OpenTelemety hat einen exporter für Prometheus
+* Grafana für die Visualisierung
